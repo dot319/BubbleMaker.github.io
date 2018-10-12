@@ -1,0 +1,1 @@
+This is a project to master object control and animation in JavaScript

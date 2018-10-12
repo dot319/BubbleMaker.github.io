@@ -1,0 +1,41 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+canvas {
+    display: block;
+    background-color: rgb(255, 255, 255);
+}
+
+#flexbox-controls {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+}
+
+#controls {
+    padding: 20px;
+    background-color: rgba(255, 192, 203, 0.507);
+}
+
+
+#flexbox-start-button {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#start-button {
+    padding: 20px;
+}
+
+#start-button-itself {
+    padding: 10px;
+    border-radius: 5px;
+}
