@@ -54,21 +54,24 @@ function ball() {
     this.y = (Math.random() * (window.innerHeight - 100)) + 50;
     this.dirX = Math.round(Math.random() * 10) + 0.5;
     this.dirY = Math.round(Math.random() * 10) + 0.5;
-    this.opa = Math.random() * 0.5 + 0.5;
+    this.opa = Math.random() * 0.5 + 0.5;   
+    this.bubbleColor = "rgba(187, 253, 255, " + this.opa + ")";
+    this.largeReflectionColor = "rgba(255, 255, 255, 0.55";
+    this.smallReflectionColor = "rgba(255, 255, 255, 0.25";
     this.update = function() {
         ctx.beginPath();
         ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
-        ctx.fillStyle = "rgba(187, 253, 255, " + this.opa + ")";
+        ctx.fillStyle = this.bubbleColor;
         ctx.closePath();
         ctx.fill();
         ctx.beginPath();
         ctx.arc(this.x - (0.4 * this.radius) , this.y - (0.4 * this.radius) , 0.3 * this.radius  , 0 , Math.PI*2 , true);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.55";
+        ctx.fillStyle = this.largeReflectionColor;
         ctx.closePath();
         ctx.fill();
         ctx.beginPath();
         ctx.arc(this.x + (0.5 * this.radius) , this.y + (0.5 * this.radius) , 0.1 * this.radius  , 0 , Math.PI*2 , true);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25";
+        ctx.fillStyle = this.smallReflectionColor;
         ctx.closePath();
         ctx.fill();
     }
@@ -103,12 +106,17 @@ function makeThemMove() {
 }
 
 function deleteBubble(event) {
-    console.log("ClientX: " + event.clientX);
-    console.log("ClientY: " + event.clientY);
     var mouseX = event.clientX;
     var mouseY = event.clientY;
-    console.log("MouseX: " + mouseX + ", mouseY: " + mouseY);
     for (var i = 0; i < balls.length; i++) {
-        console.log("Balls[ " + i + "] x and y: " + balls[i].x + " and " + balls[i].y);
+        var topX = balls[i].x - balls[i].radius;
+        var botX = balls[i].x + balls[i].radius;
+        var leftY = balls[i].y - balls[i].radius;
+        var rightY = balls[i].y + balls[i].radius;
+        if (mouseX > topX && mouseX < botX && mouseY > leftY && mouseY < rightY) {
+            balls[i].bubbleColor = "rgba(0, 0, 0, 0)";
+            balls[i].largeReflectionColor = "rgba(0, 0, 0, 0)";
+            balls[i].smallReflectionColor = "rgba(0, 0, 0, 0)";
+        }
     }
 }
