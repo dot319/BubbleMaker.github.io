@@ -54,10 +54,13 @@ function ball() {
     this.y = (Math.random() * (window.innerHeight - 100)) + 50;
     this.dirX = Math.round(Math.random() * 10) + 0.5;
     this.dirY = Math.round(Math.random() * 10) + 0.5;
-    this.opa = Math.random() * 0.5 + 0.5;   
+    this.opa = Math.random() * 0.5 + 0.5;
+    this.opaRef1 = 0.55;
+    this.opaRef2 = 0.25;   
     this.bubbleColor = "rgba(187, 253, 255, " + this.opa + ")";
-    this.largeReflectionColor = "rgba(255, 255, 255, 0.55";
-    this.smallReflectionColor = "rgba(255, 255, 255, 0.25";
+    this.largeReflectionColor = "rgba(255, 255, 255, " + this.opaRef1 + ")";
+    this.smallReflectionColor = "rgba(255, 255, 255, " + this.opaRef2 + ")";
+    this.popped = false;
     this.update = function() {
         ctx.beginPath();
         ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
@@ -87,21 +90,28 @@ function makeThemMove() {
     resizeCanvas();
     ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
     for (var i = 0; i < balls.length; i++) {
-        balls[i].update();
-        if (balls[i].x < balls[i].radius || balls[i].x > myCanvas.width - balls[i].radius) {
-            balls[i].dirX = -balls[i].dirX;
+        if (balls[i].radius < 60) {
+            if (balls[i].popped == true) {
+                balls[i].radius *= 1.3;
+            }
+            // else {
+                balls[i].update();
+                if (balls[i].x < balls[i].radius || balls[i].x > myCanvas.width - balls[i].radius) {
+                    balls[i].dirX = -balls[i].dirX;
+                }
+                if (balls[i].y < balls[i].radius || balls[i].y > myCanvas.height - balls[i].radius) {
+                    balls[i].dirY = -balls[i].dirY;
+                }
+                if (balls[i].x > myCanvas.width) {
+                    balls[i].x = myCanvas.width - 150;
+                }
+                if (balls[i].y > myCanvas.height) {
+                    balls[i].y = myCanvas.height - 150;
+                }
+                balls[i].x += balls[i].dirX;
+                balls[i].y += balls[i].dirY;
+            // }
         }
-        if (balls[i].y < balls[i].radius || balls[i].y > myCanvas.height - balls[i].radius) {
-            balls[i].dirY = -balls[i].dirY;
-        }
-        if (balls[i].x > myCanvas.width) {
-            balls[i].x = myCanvas.width - 150;
-        }
-        if (balls[i].y > myCanvas.height) {
-            balls[i].y = myCanvas.height - 150;
-        }
-        balls[i].x += balls[i].dirX;
-        balls[i].y += balls[i].dirY;
     }
 }
 
@@ -114,9 +124,10 @@ function deleteBubble(event) {
         var leftY = balls[i].y - balls[i].radius;
         var rightY = balls[i].y + balls[i].radius;
         if (mouseX > topX && mouseX < botX && mouseY > leftY && mouseY < rightY) {
-            balls[i].bubbleColor = "rgba(0, 0, 0, 0)";
-            balls[i].largeReflectionColor = "rgba(0, 0, 0, 0)";
-            balls[i].smallReflectionColor = "rgba(0, 0, 0, 0)";
+            balls[i].popped = true;
+            // balls[i].bubbleColor = "rgba(0, 0, 0, 0)";
+            // balls[i].largeReflectionColor = "rgba(0, 0, 0, 0)";
+            // balls[i].smallReflectionColor = "rgba(0, 0, 0, 0)";
         }
     }
 }
