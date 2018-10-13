@@ -10,6 +10,7 @@ function declareVariables() {
     myCanvas = document.getElementById("canvas");
     ctx = myCanvas.getContext("2d");
     myOverlay = document.getElementById("overlay");
+    myInstructions = document.getElementById("instructions");
     myFlexboxControls = document.getElementById("flexbox-controls");
     bubbles = [];
 }
@@ -17,6 +18,7 @@ function declareVariables() {
 function resizeScreen() {
     myCanvas.width = window.innerWidth;
     myCanvas.height = window.innerHeight;
+    myInstructions.style.width = window.innerWidth + "px";
     myFlexboxControls.style.height = 0.9 * window.innerHeight + "px";
 }
 

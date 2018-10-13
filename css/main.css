@@ -11,6 +11,21 @@ canvas {
     background-color: rgb(255, 255, 255);
 }
 
+#instructions {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+    color: rgba(0, 0, 0, 0.60);
+}
+
+#instructions p {
+    padding: 6px;
+}
+
 #flexbox-controls {
     position: fixed;
     left: 0;
@@ -23,7 +38,6 @@ canvas {
     height: 80px;
     margin: 18px;
     padding: 0px 30px;
-    color: rgb(44, 44, 44);
     font-weight: bold;
     font-size: 30px;
     border-radius: 40px;
