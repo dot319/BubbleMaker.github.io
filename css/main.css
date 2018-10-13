@@ -29,6 +29,7 @@ canvas {
     bottom: 0;
     display: flex;
     justify-content: center;
+    display: none;
 }
 
 #start-button {
