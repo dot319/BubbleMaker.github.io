@@ -1,7 +1,8 @@
 function letsStart() {
     declareVariables();
     resizeScreen();
-    eventListeners();
+    prepareMenu();
+    createEventListeners();
     setInterval(makeThemMove,25);
 }
 
@@ -10,18 +11,29 @@ function declareVariables() {
     ctx = myCanvas.getContext("2d");
     myOverlay = document.getElementById("overlay");
     myFlexboxControls = document.getElementById("flexbox-controls");
-    myFlexboxStartButton = document.getElementById("flexbox-start-button");
     bubbles = [];
 }
 
 function resizeScreen() {
     myCanvas.width = window.innerWidth;
     myCanvas.height = window.innerHeight;
-    myFlexboxControls.style.height = window.innerHeight + "px";
-    myFlexboxStartButton.style.width = window.innerWidth + "px";
+    myFlexboxControls.style.height = 0.9 * window.innerHeight + "px";
 }
 
-function eventListeners() {
+function prepareMenu() {
+    var buttons = document.getElementsByClassName("controls");
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function () {
+            var current = document.getElementsByClassName("active");
+            if (current.length > 0) {
+                current[0].className = current[0].className.replace(" active", "");
+            }       
+            this.className += " active";
+        })
+    }
+}
+
+function createEventListeners() {
     window.addEventListener('resize', resizeScreen);
     window.addEventListener('mousedown', detectButton);
     window.addEventListener('mouseup', releaseBubble);

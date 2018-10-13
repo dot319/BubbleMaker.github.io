@@ -1,33 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bouncy</title>
+        <title>Virtual Bubble Blower</title>
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--https://codepen.io/b4rb4tron/pen/wjyXNJ-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     </head>
     <body onLoad="letsStart()" oncontextmenu="return false;">
         <canvas id="canvas"></canvas>
 
         <div id="flexbox-controls">
             <div id="controls">
-                <ul>
-                    <li>Color</li>
-                    <li>Size</li>
-                    <li>Horizontal speed</li>
-                    <li>Vertical speed</li>
-                    <li>Opacity</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="flexbox-start-button">
-            <div id="start-button">
-                <button id="start-button-itself">Make a bubble!</button>
+                <div id="blow-bubbles" class="controls">
+                    <div>B</div>
+                    <div id="blow-bubbles-grow" class="controls-grow">low bubbles</div>
+                </div>
+                <div id="pop-bubbles" class="controls">
+                    <div>P</div>
+                    <div id="pop-bubbles-grow" class="controls-grow">op bubbles</div>
+                </div>
             </div>
         </div>
 
         <script src="js/myscripts.js"></script>
     </body>
 </html>
-
