@@ -2,6 +2,7 @@ function letsStart() {
     declareVariables();
     resizeScreen();
     prepareMenu();
+    setCurrentTool();
     createEventListeners();
     setInterval(makeThemMove,25);
 }
@@ -12,7 +13,10 @@ function declareVariables() {
     myOverlay = document.getElementById("overlay");
     myInstructions = document.getElementById("instructions");
     myFlexboxControls = document.getElementById("flexbox-controls");
+    blowBubbleButton = document.getElementById("blow-bubbles");
+    popBubbleButton = document.getElementById("pop-bubbles");
     bubbles = [];
+    currentTool = 0;
 }
 
 function resizeScreen() {
@@ -35,19 +39,36 @@ function prepareMenu() {
     }
 }
 
-function createEventListeners() {
-    window.addEventListener('resize', resizeScreen);
-    window.addEventListener('mousedown', detectButton);
-    window.addEventListener('mouseup', releaseBubble);
+function setCurrentTool() {
+    document.getElementById("blow-bubbles").onclick = function() {
+        currentTool = 0;
+    }   
+    document.getElementById("pop-bubbles").onclick = function() {
+        currentTool = 1;
+    }
 }
 
-function detectButton(event) {
-    switch (event.button) {
+function createEventListeners() {
+    window.addEventListener('resize', resizeScreen);
+    window.addEventListener('mousedown', mouseDownCurrentTool);
+    window.addEventListener('mouseup', mouseUpCurrentTool);
+}
+
+function mouseDownCurrentTool(event) {
+    switch (currentTool) {
         case 0:
+            blowBubble(event);
+            break;
+        case 1:
             deleteBubble(event);
             break;
-        case 2:
-            blowBubble(event);
+    }
+}
+
+function mouseUpCurrentTool(event) {
+    switch (currentTool) {
+        case 0:
+            releaseBubble(event);
             break;
     }
 }
@@ -88,15 +109,12 @@ function makeBubble(x, y) {
 }
 
 function releaseBubble(event) {
-    if (event.button == 2) {
-        var n = bubbles.length;
-        if (bubbles[n-1].popped == false) {
-            bubbles[n-1].ready = true;
-            bubbles[n-1].dirX = Math.round(Math.random() * 20) -10;
-            bubbles[n-1].dirY = Math.round(Math.random() * 20) -10;
-            bubbles[n-1].originalRadius = bubbles[n-1].radius;
-        }
-
+    var n = bubbles.length;
+    if (bubbles[n-1].popped == false) {
+        bubbles[n-1].ready = true;
+        bubbles[n-1].dirX = Math.round(Math.random() * 20) -10;
+        bubbles[n-1].dirY = Math.round(Math.random() * 20) -10;
+        bubbles[n-1].originalRadius = bubbles[n-1].radius;
     }
 }
 
