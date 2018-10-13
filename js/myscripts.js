@@ -18,38 +18,9 @@ function resizeCanvas() {
     myFlexboxStartButton.style.width = window.innerWidth + "px";
 }
 
-/*var x = 20;
-var y = 20;
-var dirx = 4;
-var diry = 7;*/
-
-/*function draw() {
-    ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
-    ctx.beginPath();
-    ctx.fillStyle="#ccff33";
-    ctx.arc(x,y,20,0,Math.PI*2,true);
-    ctx.closePath();
-    ctx.fill();
-    if (x < 20 || x > myCanvas.width - 20) {
-        dirx = -dirx;
-    }
-    if (y < 20 || y > myCanvas.height - 20) {
-        diry = -diry;
-    }
-    if (x > myCanvas.width) {
-        x = myCanvas.width;
-    }
-    if (y > myCanvas.height) {
-        y = myCanvas.height;
-    }
-    x += dirx;
-    y += diry;
-}*/
-
-
-
 function ball() {
-    this.radius = Math.random() * 35 + 20;
+    this.originalRadius = Math.random() * 35 + 25;
+    this.radius = this.originalRadius;
     this.x = (Math.random() * (window.innerWidth - 100)) + 50;
     this.y = (Math.random() * (window.innerHeight - 100)) + 50;
     this.dirX = Math.round(Math.random() * 10) + 0.5;
@@ -90,27 +61,25 @@ function makeThemMove() {
     resizeCanvas();
     ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
     for (var i = 0; i < balls.length; i++) {
-        if (balls[i].radius < 60) {
+        if (balls[i].radius < 1.4 * balls[i].originalRadius) {
             if (balls[i].popped == true) {
-                balls[i].radius *= 1.3;
+                balls[i].radius *= 1.15;
             }
-            // else {
-                balls[i].update();
-                if (balls[i].x < balls[i].radius || balls[i].x > myCanvas.width - balls[i].radius) {
-                    balls[i].dirX = -balls[i].dirX;
-                }
-                if (balls[i].y < balls[i].radius || balls[i].y > myCanvas.height - balls[i].radius) {
-                    balls[i].dirY = -balls[i].dirY;
-                }
-                if (balls[i].x > myCanvas.width) {
-                    balls[i].x = myCanvas.width - 150;
-                }
-                if (balls[i].y > myCanvas.height) {
-                    balls[i].y = myCanvas.height - 150;
-                }
-                balls[i].x += balls[i].dirX;
-                balls[i].y += balls[i].dirY;
-            // }
+            balls[i].update();
+            if (balls[i].x < balls[i].radius || balls[i].x > myCanvas.width - balls[i].radius) {
+                balls[i].dirX = -balls[i].dirX;
+            }
+            if (balls[i].y < balls[i].radius || balls[i].y > myCanvas.height - balls[i].radius) {
+                balls[i].dirY = -balls[i].dirY;
+            }
+            if (balls[i].x > myCanvas.width) {
+                balls[i].x = myCanvas.width - 150;
+            }
+            if (balls[i].y > myCanvas.height) {
+                balls[i].y = myCanvas.height - 150;
+            }
+            balls[i].x += balls[i].dirX;
+            balls[i].y += balls[i].dirY;
         }
     }
 }
@@ -125,9 +94,6 @@ function deleteBubble(event) {
         var rightY = balls[i].y + balls[i].radius;
         if (mouseX > topX && mouseX < botX && mouseY > leftY && mouseY < rightY) {
             balls[i].popped = true;
-            // balls[i].bubbleColor = "rgba(0, 0, 0, 0)";
-            // balls[i].largeReflectionColor = "rgba(0, 0, 0, 0)";
-            // balls[i].smallReflectionColor = "rgba(0, 0, 0, 0)";
         }
     }
 }
