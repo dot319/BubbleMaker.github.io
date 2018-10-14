@@ -79,6 +79,19 @@ function mouseDownCurrentTool(event) {
 
 }
 
+function mouseUpCurrentTool(event) {
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    var clickIsButton = checkIfButton(mouseX, mouseY);
+    if (clickIsButton == false) {
+        switch (currentTool) {
+            case 0:
+                releaseBubble(event);
+                break;
+        }
+    }
+}
+
 function checkIfButton(mouseX, mouseY) {
     var blowBtn = document.getElementById("blow-bubbles");
     var blowRect =  blowBtn.getBoundingClientRect();
@@ -105,13 +118,7 @@ function checkIfButton(mouseX, mouseY) {
     }
 }
 
-function mouseUpCurrentTool(event) {
-    switch (currentTool) {
-        case 0:
-            releaseBubble(event);
-            break;
-    }
-}
+
 
 function blowBubble(event) {
     var mouseX = event.clientX;
