@@ -63,7 +63,7 @@ canvas {
 #blow-bubbles {
     max-width: 80px;
     transition: max-width 1s;
-    background-color: rgb(117, 172, 255);
+    background-color: rgb(255, 199, 96);
 }
 
 #blow-bubbles:hover {
@@ -77,6 +77,16 @@ canvas {
 }
 
 #color-bubbles:hover {
+    max-width: 800px; 
+}
+
+#freeze-bubbles {
+    max-width: 80px;
+    transition: max-width 1s;
+    background-color: rgb(117, 149, 255);
+}
+
+#freeze-bubbles:hover {
     max-width: 800px; 
 }
 

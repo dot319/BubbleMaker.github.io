@@ -44,8 +44,11 @@ function setCurrentTool() {
     document.getElementById("color-bubbles").onclick = function() {
         currentTool = 1;
     }      
-    document.getElementById("pop-bubbles").onclick = function() {
+    document.getElementById("freeze-bubbles").onclick = function() {
         currentTool = 2;
+    }
+    document.getElementById("pop-bubbles").onclick = function() {
+        currentTool = 3;
     }
 }
 
@@ -64,6 +67,9 @@ function mouseDownCurrentTool(event) {
             colorBubble(event);
             break;
         case 2:
+            freezeBubble(event);
+            break;
+        case 3:
             deleteBubble(event);
             break;
     }
@@ -98,6 +104,31 @@ function colorBubble(event) {
     }
 }
 
+function freezeBubble(event) {
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    for (var i = 0; i < bubbles.length; i++) {
+        var topX = bubbles[i].x - bubbles[i].radius;
+        var botX = bubbles[i].x + bubbles[i].radius;
+        var leftY = bubbles[i].y - bubbles[i].radius;
+        var rightY = bubbles[i].y + bubbles[i].radius;
+        if (mouseX > topX && mouseX < botX && mouseY > leftY && mouseY < rightY) {
+            if (bubbles[i].frozen == false) {
+                bubbles[i].frozen = true;
+                bubbles[i].dirX = 0;
+                bubbles[i].dirY = 0;
+                break;
+            }
+            else if (bubbles[i].frozen == true) {
+                bubbles[i].frozen = false;
+                bubbles[i].dirX = Math.round(Math.random() * 20) -10;
+                bubbles[i].dirY = Math.round(Math.random() * 20) -10;
+                break;
+            }
+        }
+    }
+}
+
 function deleteBubble(event) {
     var mouseX = event.clientX;
     var mouseY = event.clientY;
@@ -127,6 +158,7 @@ function makeBubble(x, y) {
     this.randomColor = randomColor(0.4);
     this.ready = false;
     this.painted = 0;
+    this.frozen = false;
     this.popped = false;
 }
 
