@@ -13,8 +13,6 @@ function declareVariables() {
     myOverlay = document.getElementById("overlay");
     myInstructions = document.getElementById("instructions");
     myFlexboxControls = document.getElementById("flexbox-controls");
-    blowBubbleButton = document.getElementById("blow-bubbles");
-    popBubbleButton = document.getElementById("pop-bubbles");
     bubbles = [];
     currentTool = 0;
 }
@@ -42,9 +40,12 @@ function prepareMenu() {
 function setCurrentTool() {
     document.getElementById("blow-bubbles").onclick = function() {
         currentTool = 0;
-    }   
-    document.getElementById("pop-bubbles").onclick = function() {
+    }
+    document.getElementById("color-bubbles").onclick = function() {
         currentTool = 1;
+    }      
+    document.getElementById("pop-bubbles").onclick = function() {
+        currentTool = 2;
     }
 }
 
@@ -60,6 +61,9 @@ function mouseDownCurrentTool(event) {
             blowBubble(event);
             break;
         case 1:
+            colorBubble(event);
+            break;
+        case 2:
             deleteBubble(event);
             break;
     }
@@ -70,6 +74,27 @@ function mouseUpCurrentTool(event) {
         case 0:
             releaseBubble(event);
             break;
+    }
+}
+
+function blowBubble(event) {
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    bubbles.push(new makeBubble(mouseX, mouseY));
+}
+
+function colorBubble(event) {
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    for (var i = 0; i < bubbles.length; i++) {
+        var topX = bubbles[i].x - bubbles[i].radius;
+        var botX = bubbles[i].x + bubbles[i].radius;
+        var leftY = bubbles[i].y - bubbles[i].radius;
+        var rightY = bubbles[i].y + bubbles[i].radius;
+        if (mouseX > topX && mouseX < botX && mouseY > leftY && mouseY < rightY) {
+            bubbles[i].randomColor = randomColor(0.4);
+            bubbles[i].painted++;
+        }
     }
 }
 
@@ -87,12 +112,6 @@ function deleteBubble(event) {
     }
 }
 
-function blowBubble(event) {
-    var mouseX = event.clientX;
-    var mouseY = event.clientY;
-    bubbles.push(new makeBubble(mouseX, mouseY));
-}
-
 function makeBubble(x, y) {
     this.originalRadius = 25;
     this.radius = this.originalRadius;
@@ -107,7 +126,7 @@ function makeBubble(x, y) {
     this.randomShade = randomColor(0.08);
     this.randomColor = randomColor(0.4);
     this.ready = false;
-    this.painted = false;
+    this.painted = 0;
     this.popped = false;
 }
 
@@ -132,8 +151,8 @@ function releaseBubble(event) {
 function makeThemMove() {
     ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
     for (var i = 0; i < bubbles.length; i++) {
-        if (bubbles[i].ready == false && bubbles[i].radius > 70) {
-            bubbles[i].originalRadius = 70;
+        if (bubbles[i].ready == false && bubbles[i].radius > 75) {
+            bubbles[i].originalRadius = 75;
             bubbles[i].popped = true;
         }
         if (bubbles[i].radius < 1.4 * bubbles[i].originalRadius || bubbles[i].popped == false) {
@@ -143,7 +162,12 @@ function makeThemMove() {
             if (bubbles[i].ready == false) {
                 bubbles[i].radius *= 1.02;
             }
-            drawBubble(i);
+            if (bubbles[i].painted == 0) {
+                drawBubble(i);
+            }
+            if (bubbles[i].painted > 0) {
+                drawColoredBubble(i);
+            }
             updateBubble(i);
         }
     }
