@@ -59,19 +59,51 @@ function createEventListeners() {
 }
 
 function mouseDownCurrentTool(event) {
-    switch (currentTool) {
-        case 0:
-            blowBubble(event);
-            break;
-        case 1:
-            colorBubble(event);
-            break;
-        case 2:
-            freezeBubble(event);
-            break;
-        case 3:
-            deleteBubble(event);
-            break;
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    var clickIsButton = checkIfButton(mouseX, mouseY);
+    if (clickIsButton == false) {
+        switch (currentTool) {
+            case 0:
+                blowBubble(event);
+                break;
+            case 1:
+                colorBubble(event);
+                break;
+            case 2:
+                freezeBubble(event);
+                break;
+            case 3:
+                deleteBubble(event);
+                break;
+        }
+    }
+
+}
+
+function checkIfButton(mouseX, mouseY) {
+    var blowBtn = document.getElementById("blow-bubbles");
+    var blowRect =  blowBtn.getBoundingClientRect();
+    if (mouseY > blowRect.top && mouseY < blowRect.bottom && mouseX > blowRect.left && mouseX < blowRect.right) {
+        return true;
+    }
+    var colorBtn = document.getElementById("color-bubbles");
+    var colorRect =  colorBtn.getBoundingClientRect();
+    if (mouseY > colorRect.top && mouseY < colorRect.bottom && mouseX > colorRect.left && mouseX < colorRect.right) {
+        return true;
+    }
+    var freezeBtn = document.getElementById("freeze-bubbles");
+    var freezeRect =  freezeBtn.getBoundingClientRect();
+    if (mouseY > freezeRect.top && mouseY < freezeRect.bottom && mouseX > freezeRect.left && mouseX < freezeRect.right) {
+        return true;
+    }
+    var popBtn = document.getElementById("pop-bubbles");
+    var popRect =  popBtn.getBoundingClientRect();
+    if (mouseY > popRect.top && mouseY < popRect.bottom && mouseX > popRect.left && mouseX < popRect.right) {
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -87,6 +119,16 @@ function blowBubble(event) {
     var mouseX = event.clientX;
     var mouseY = event.clientY;
     bubbles.push(new makeBubble(mouseX, mouseY));
+}
+
+function releaseBubble(event) {
+    var n = bubbles.length;
+    if (bubbles[n-1].popped == false) {
+        bubbles[n-1].ready = true;
+        bubbles[n-1].dirX = Math.round(Math.random() * 20) -10;
+        bubbles[n-1].dirY = Math.round(Math.random() * 20) -10;
+        bubbles[n-1].originalRadius = bubbles[n-1].radius;
+    }
 }
 
 function colorBubble(event) {
@@ -170,16 +212,6 @@ function randomColor(opacity) {
     return color;
 }
 
-function releaseBubble(event) {
-    var n = bubbles.length;
-    if (bubbles[n-1].popped == false) {
-        bubbles[n-1].ready = true;
-        bubbles[n-1].dirX = Math.round(Math.random() * 20) -10;
-        bubbles[n-1].dirY = Math.round(Math.random() * 20) -10;
-        bubbles[n-1].originalRadius = bubbles[n-1].radius;
-    }
-}
-
 function makeThemMove() {
     ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
     for (var i = 0; i < bubbles.length; i++) {
@@ -200,6 +232,9 @@ function makeThemMove() {
             if (bubbles[i].painted > 0) {
                 drawColoredBubble(i);
             }
+            if (bubbles[i].frozen == true) {
+                drawIcedBubble(i);
+            }
             updateBubble(i);
         }
     }
@@ -218,6 +253,11 @@ function drawColoredBubble(i) {
     drawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].randomColor);
     drawCircle(bubbles[i].x - (0.4 * bubbles[i].radius), bubbles[i].y - (0.4 * bubbles[i].radius), 0.3 * bubbles[i].radius, bubbles[i].largeReflectionColor);
     drawCircle(bubbles[i].x + (0.5 * bubbles[i].radius), bubbles[i].y + (0.5 * bubbles[i].radius), 0.1 * bubbles[i].radius, bubbles[i].smallReflectionColor);
+}
+
+function drawIcedBubble(i) {
+    var iceColor = "rgba(0, 0, 0, 0.2)";
+    drawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius + 2, iceColor);
 }
 
 function drawCircle(x, y, radius, color) {
@@ -255,4 +295,3 @@ function updateBubble(i) {
     bubbles[i].x += bubbles[i].dirX;
     bubbles[i].y += bubbles[i].dirY;
 }
-
