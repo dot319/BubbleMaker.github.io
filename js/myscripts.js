@@ -100,12 +100,23 @@ function makeBubble(x, y) {
     this.y = y;
     this.dirX = 0;
     this.dirY = 0;
-    this.opa = Math.random() * 0.5 + 0.5;
-    this.bubbleColor = "rgba(187, 253, 255, " + this.opa + ")";
-    this.largeReflectionColor = "rgba(255, 255, 255, 0.55)";
-    this.smallReflectionColor = "rgba(255, 255, 255, 0.25)";
-    this.popped = false;
+    this.opa = Math.random() * 0.3 + 0.3;
+    this.bubbleColor = "rgba(165, 253, 255, " + this.opa + ")";
+    this.largeReflectionColor = "rgba(255, 255, 255, 0.45)";
+    this.smallReflectionColor = "rgba(255, 255, 255, 0.20)";
+    this.randomShade = randomColor(0.08);
+    this.randomColor = randomColor(0.4);
     this.ready = false;
+    this.painted = false;
+    this.popped = false;
+}
+
+function randomColor(opacity) {
+    var red = Math.round(Math.random() * 255);
+    var green = Math.round(Math.random() * 255);
+    var blue = Math.round(Math.random() * 150);
+    var color = "rgba(" + red + ", " + green + ", " + blue + "," + opacity + ")";
+    return color;
 }
 
 function releaseBubble(event) {
@@ -139,7 +150,16 @@ function makeThemMove() {
 }
 
 function drawBubble(i) {
+    drawRadialGradient(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].bubbleColor);
     drawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].bubbleColor);
+    drawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].randomShade);
+    drawCircle(bubbles[i].x - (0.4 * bubbles[i].radius), bubbles[i].y - (0.4 * bubbles[i].radius), 0.3 * bubbles[i].radius, bubbles[i].largeReflectionColor);
+    drawCircle(bubbles[i].x + (0.5 * bubbles[i].radius), bubbles[i].y + (0.5 * bubbles[i].radius), 0.1 * bubbles[i].radius, bubbles[i].smallReflectionColor);
+}
+
+function drawColoredBubble(i) {
+    drawRadialGradient(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].bubbleColor);
+    drawCircle(bubbles[i].x, bubbles[i].y, bubbles[i].radius, bubbles[i].randomColor);
     drawCircle(bubbles[i].x - (0.4 * bubbles[i].radius), bubbles[i].y - (0.4 * bubbles[i].radius), 0.3 * bubbles[i].radius, bubbles[i].largeReflectionColor);
     drawCircle(bubbles[i].x + (0.5 * bubbles[i].radius), bubbles[i].y + (0.5 * bubbles[i].radius), 0.1 * bubbles[i].radius, bubbles[i].smallReflectionColor);
 }
@@ -148,6 +168,17 @@ function drawCircle(x, y, radius, color) {
     ctx.beginPath();
     ctx.arc(x,y,radius,0,Math.PI*2,true);
     ctx.fillStyle = color;
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawRadialGradient(x, y, radius, color) {
+    ctx.beginPath();
+    var grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    grd.addColorStop(0, "rgba(255, 255, 255, 0)");
+    grd.addColorStop(1, color);
+    ctx.arc(x,y,radius,0,Math.PI*2,true);
+    ctx.fillStyle = grd;
     ctx.closePath();
     ctx.fill();
 }
@@ -168,3 +199,4 @@ function updateBubble(i) {
     bubbles[i].x += bubbles[i].dirX;
     bubbles[i].y += bubbles[i].dirY;
 }
+

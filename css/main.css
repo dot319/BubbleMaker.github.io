@@ -70,6 +70,16 @@ canvas {
     max-width: 800px; 
 }
 
+#color-bubbles {
+    max-width: 80px;
+    transition: max-width 1s;
+    background-color: rgb(140, 255, 117);
+}
+
+#color-bubbles:hover {
+    max-width: 800px; 
+}
+
 #pop-bubbles {
     max-width: 80px;
     transition: max-width 1s;
